@@ -73,18 +73,35 @@ Returns `403` if the unlock date has not passed or the capsule was already opene
 
 ## Email notifications
 
-When SMTP is configured, the recipient gets an email with the unlock link as soon as the capsule becomes ready.
+When email is configured, the recipient gets an unlock link as soon as the capsule becomes ready.
+
+### Option A: Mailtrap API (what you have)
+
+From **Email Sending → Integration → API** in Mailtrap:
 
 ```env
-APP_BASE_URL=https://your-domain.com
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=your-user
-SMTP_PASSWORD=your-password
-SMTP_FROM=Timecapsule <noreply@example.com>
+APP_BASE_URL=http://127.0.0.1:3000
+MAILTRAP_API_TOKEN=your_api_token
+MAILTRAP_FROM_EMAIL=hello@demomailtrap.co
+MAILTRAP_FROM_NAME=Timecapsule
 ```
 
-If `SMTP_HOST` is not set, capsules still unlock normally — only the email step is skipped.
+This sends to **real inboxes** (use your own email as recipient when testing).
+
+### Option B: Mailtrap SMTP sandbox (fake inbox)
+
+From **Email Testing → Inboxes → SMTP Settings**:
+
+```env
+APP_BASE_URL=http://127.0.0.1:3000
+SMTP_HOST=sandbox.smtp.mailtrap.io
+SMTP_PORT=587
+SMTP_USERNAME=your_username
+SMTP_PASSWORD=your_password
+SMTP_FROM=Timecapsule <noreply@timecapsule.local>
+```
+
+If neither `MAILTRAP_API_TOKEN` nor `SMTP_HOST` is set, capsules still unlock — only email is skipped.
 
 ## Project layout
 

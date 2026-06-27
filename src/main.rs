@@ -39,7 +39,9 @@ async fn main() -> anyhow::Result<()> {
     if email.is_some() {
         tracing::info!("email notifications enabled");
     } else {
-        tracing::info!("email notifications disabled (set SMTP_HOST to enable)");
+        tracing::info!(
+            "email notifications disabled (set MAILTRAP_API_TOKEN or SMTP_HOST to enable)"
+        );
     }
 
     let state = AppState::new(&config, email).await?;
