@@ -39,9 +39,12 @@ pub struct CapsuleRecord {
     pub wrapped_dek: Vec<u8>,
     pub wrapped_dek_nonce: [u8; 12],
     pub unlock_token_hash: [u8; 32],
+    pub encrypted_unlock_token: Option<Vec<u8>>,
+    pub unlock_token_nonce: Option<[u8; 12]>,
     pub status: CapsuleStatus,
     pub created_at: DateTime<Utc>,
     pub opened_at: Option<DateTime<Utc>>,
+    pub notification_sent_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Debug, Deserialize)]

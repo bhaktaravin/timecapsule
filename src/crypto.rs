@@ -61,6 +61,25 @@ pub fn decrypt_payload(
         .map_err(|_| anyhow::anyhow!("failed to decrypt payload"))
 }
 
+pub fn encrypt_secret(master_key: &[u8; 32], plaintext: &[u8]) -> Result<(Vec<u8>, [u8; 12])> {
+    let cipher = ChaCha20Poly1305::new(master_key.into());
+    let nonce = ChaCha20Poly1305::generate_nonce(&mut OsRng);
+    let ciphertext = cipher
+        .encrypt(&nonce, plaintext)
+        .map_err(|_| anyhow::anyhow!("failed to encrypt secret"))?;
+    Ok((ciphertext, nonce_to_array(nonce)))
+}
+
+pub fn decrypt_secret(
+    master_key: &[u8; 32],
+    ciphertext: &[u8],
+    nonce: &[u8; 12],
+) -> Result<Vec<u8>> {
+    ChaCha20Poly1305::new(master_key.into())
+        .decrypt(nonce.into(), ciphertext)
+        .map_err(|_| anyhow::anyhow!("failed to decrypt secret"))
+}
+
 pub fn generate_unlock_token() -> String {
     let mut bytes = [0u8; 32];
     OsRng.fill_bytes(&mut bytes);

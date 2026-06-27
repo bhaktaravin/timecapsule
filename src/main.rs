@@ -1,12 +1,14 @@
 mod config;
 mod crypto;
 mod db;
+mod email;
 mod error;
 mod jobs;
 mod models;
 mod routes;
 
 use std::net::SocketAddr;
+use std::sync::Arc;
 
 use axum::Router;
 use tower_http::{
@@ -18,6 +20,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use config::Config;
 use db::AppState;
+use email::EmailConfig;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -32,7 +35,14 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let config = Config::from_env()?;
-    let state = AppState::new(&config).await?;
+    let email = Arc::new(EmailConfig::from_env()?);
+    if email.is_some() {
+        tracing::info!("email notifications enabled");
+    } else {
+        tracing::info!("email notifications disabled (set SMTP_HOST to enable)");
+    }
+
+    let state = AppState::new(&config, email).await?;
 
     jobs::spawn_unlock_scheduler(state.clone());
 

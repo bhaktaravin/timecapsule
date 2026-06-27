@@ -6,7 +6,7 @@ use chrono::{Duration, Utc};
 use uuid::Uuid;
 
 use crate::{
-    crypto::{decrypt_payload, encrypt_payload, generate_unlock_token, hash_unlock_token, tokens_equal},
+    crypto::{decrypt_payload, encrypt_payload, encrypt_secret, generate_unlock_token, hash_unlock_token, tokens_equal},
     db::{
         can_unlock, effective_status, get_capsule_by_id, get_capsule_by_token_hash,
         insert_capsule, mark_capsule_opened, AppState,
@@ -64,6 +64,9 @@ async fn create_capsule_record(
 
     let unlock_token = generate_unlock_token();
     let unlock_token_hash = hash_unlock_token(&unlock_token);
+    let (encrypted_unlock_token, unlock_token_nonce) =
+        encrypt_secret(state.master_key.as_ref(), unlock_token.as_bytes())
+            .map_err(AppError::Internal)?;
 
     let id = Uuid::new_v4();
     let created_at = Utc::now();
@@ -78,6 +81,8 @@ async fn create_capsule_record(
         &encrypted.wrapped_dek,
         &encrypted.wrapped_dek_nonce,
         &unlock_token_hash,
+        &encrypted_unlock_token,
+        &unlock_token_nonce,
         created_at,
     )
     .await?;
@@ -203,7 +208,9 @@ mod tests {
             port: 0,
             dev_mode: true,
         };
-        AppState::new(&config).await.expect("test state")
+        AppState::new(&config, std::sync::Arc::new(None))
+            .await
+            .expect("test state")
     }
 
     #[tokio::test]

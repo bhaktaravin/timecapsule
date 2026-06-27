@@ -71,6 +71,21 @@ curl -s http://127.0.0.1:3000/api/unlock/{token}
 
 Returns `403` if the unlock date has not passed or the capsule was already opened.
 
+## Email notifications
+
+When SMTP is configured, the recipient gets an email with the unlock link as soon as the capsule becomes ready.
+
+```env
+APP_BASE_URL=https://your-domain.com
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USERNAME=your-user
+SMTP_PASSWORD=your-password
+SMTP_FROM=Timecapsule <noreply@example.com>
+```
+
+If `SMTP_HOST` is not set, capsules still unlock normally — only the email step is skipped.
+
 ## Project layout
 
 ```
@@ -83,7 +98,7 @@ src/
 
 ## Roadmap
 
-- [ ] Email notification on unlock
+- [x] Email notification on unlock
 - [ ] Video attachments
 - [ ] Trusted-contact trigger ("if something happens to me")
 - [ ] Optional end-to-end encryption
