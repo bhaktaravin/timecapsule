@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Timecapsule — Write for the future</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="logo"><span class="logo-dot"></span> Timecapsule</div>
+        <h1>Write something today.</h1>
+        <p class="subtitle">Seal a message for someone you love. It unlocks on the date you choose.</p>
+      </header>
+
+      <section class="card" id="create-form-card">
+        <form id="create-form">
+          <div class="field">
+            <label for="message">Your message</label>
+            <textarea id="message" name="message" placeholder="Happy 18th birthday. I wrote this when you were little..." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="recipient_email">Recipient email</label>
+            <input id="recipient_email" name="recipient_email" type="email" placeholder="someone@example.com" required />
+            <p class="hint">For your records — email delivery comes in a later version.</p>
+          </div>
+
+          <div class="field">
+            <label for="unlock_at">Unlock on</label>
+            <input id="unlock_at" name="unlock_at" type="datetime-local" required />
+            <p class="hint">The message stays sealed until this date.</p>
+          </div>
+
+          <button class="primary" type="submit" id="submit-btn">Seal message</button>
+        </form>
+
+        <div class="dev-panel hidden" id="dev-panel">
+          <p class="hint">Dev mode: create a test capsule that unlocks in 15 seconds.</p>
+          <button class="secondary" type="button" id="test-btn">Create test unlock</button>
+        </div>
+      </section>
+
+      <section class="card hidden" id="success-card">
+        <div class="panel success">
+          <div class="panel-title">Message sealed</div>
+          <p>Save the unlock link below. It cannot be recovered if lost.</p>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-row"><span>Status</span><span><span class="status-pill sealed">sealed</span></span></div>
+          <div class="meta-row"><span>Recipient</span><span id="result-recipient"></span></div>
+          <div class="meta-row"><span>Unlocks</span><span id="result-unlock-at"></span></div>
+        </div>
+
+        <label>Unlock link</label>
+        <div class="token-box" id="result-link"></div>
+
+        <label style="margin-top: 1rem">Unlock token</label>
+        <div class="token-box" id="result-token"></div>
+
+        <div class="actions">
+          <button class="secondary" type="button" id="copy-link-btn">Copy link</button>
+          <button class="secondary" type="button" id="copy-token-btn">Copy token</button>
+          <button class="secondary hidden" type="button" id="open-test-btn">Open test capsule</button>
+          <button class="secondary" type="button" id="new-btn">Seal another</button>
+        </div>
+
+        <div class="panel warning hidden" id="countdown-panel" style="margin-top: 1rem">
+          <div class="panel-title">Test countdown</div>
+          <p id="countdown-text">Unlocks in 15 seconds…</p>
+        </div>
+      </section>
+
+      <section class="card hidden" id="error-card">
+        <div class="panel error">
+          <div class="panel-title">Could not seal message</div>
+          <p id="error-text"></p>
+        </div>
+      </section>
+
+      <nav class="nav">
+        <a href="/">Create</a>
+        <a href="/unlock/">Open capsule</a>
+      </nav>
+
+      <footer>Encrypted at rest · Server-side v1</footer>
+    </main>
+
+    <script src="/js/create.js"></script>
+  </body>
+</html>

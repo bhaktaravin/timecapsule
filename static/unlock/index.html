@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Timecapsule — Open capsule</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="logo"><span class="logo-dot"></span> Timecapsule</div>
+        <h1>Open a capsule</h1>
+        <p class="subtitle">Paste the unlock link or token you received. The message appears once the unlock date has passed.</p>
+      </header>
+
+      <section class="card" id="unlock-form-card">
+        <form id="unlock-form">
+          <div class="field">
+            <label for="token">Unlock token</label>
+            <input id="token" name="token" type="text" placeholder="Paste token from your unlock link" required />
+            <p class="hint">Or open a link shared with you — the token fills in automatically.</p>
+          </div>
+
+          <button class="primary" type="submit" id="unlock-btn">Open capsule</button>
+        </form>
+      </section>
+
+      <section class="card hidden" id="sealed-card">
+        <div class="panel warning">
+          <div class="panel-title">Still sealed</div>
+          <p id="sealed-text"></p>
+        </div>
+      </section>
+
+      <section class="card hidden" id="opened-card">
+        <div class="panel success">
+          <div class="panel-title">Capsule opened</div>
+          <p id="opened-meta"></p>
+        </div>
+        <div class="message-body" id="message-body"></div>
+      </section>
+
+      <section class="card hidden" id="error-card">
+        <div class="panel error">
+          <div class="panel-title">Could not open capsule</div>
+          <p id="error-text"></p>
+        </div>
+      </section>
+
+      <nav class="nav">
+        <a href="/">Create</a>
+        <a href="/unlock/">Open capsule</a>
+      </nav>
+
+      <footer>One-time unlock · Already opened capsules cannot be read again</footer>
+    </main>
+
+    <script src="/js/unlock.js"></script>
+  </body>
+</html>
